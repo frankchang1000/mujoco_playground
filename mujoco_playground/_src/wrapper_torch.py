@@ -172,8 +172,26 @@ class RSLRLBraxWrapper(VecEnv):
     info = self.env_state.info
     truncation = _jax_to_torch(info["truncation"])
 
+    # Get observation before auto-reset (for PWM buffer)
+    # This is the final observation of the episode before the env resets
+    first_obs_key = "AutoResetWrapper_first_obs"
+    if first_obs_key in info:
+      if self.asymmetric_obs:
+        first_obs = _jax_to_torch(info[first_obs_key]["state"])
+      else:
+        first_obs = _jax_to_torch(info[first_obs_key])
+    else:
+      # Fallback to current obs if not available
+      first_obs = obs["state"]
+
+    # Compute termination (early failure, not time limit)
+    termination = done.bool() & ~truncation.bool()
+
     info_ret = {
         "time_outs": truncation,
+        "termination": termination.float(),
+        "obs_before_reset": first_obs,
+        "primal": reward,
         "observations": {"critic": critic_obs},
         "log": {},
     }

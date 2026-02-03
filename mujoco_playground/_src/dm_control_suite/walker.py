@@ -131,7 +131,7 @@ class PlanarWalker(mjx_env.MjxEnv):
   def _get_obs(self, data: mjx.Data, info: dict[str, Any]) -> jax.Array:
     del info  # Unused.
     orientations = data.xmat[1:, [0, 0], [0, 2]].ravel()
-    height = data.xmat[self._torso_id, 2, 2]
+    height = data.xpos[self._torso_id, 2]  # Actual z-position, not rotation matrix
     velocity = data.qvel
     return jp.concatenate([
         orientations,

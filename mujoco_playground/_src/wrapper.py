@@ -193,10 +193,13 @@ class BraxAutoResetWrapper(Wrapper):
         done = jp.reshape(done, [x.shape[0]] + [1] * (len(x.shape) - 1))
       return jp.where(done, x, y)
 
+    # Store the observation before auto-reset (final obs of episode for done envs)
+    # This is needed by PWM and similar algorithms that need obs_before_reset
+    next_info = state.info
+    next_info[f'{self._info_key}_first_obs'] = state.obs
+
     data = jax.tree.map(where_done, reset_data, state.data)
     obs = jax.tree.map(where_done, reset_obs, state.obs)
-
-    next_info = state.info
     done_count_key = f'{self._info_key}_done_count'
     if self._full_reset and reset_state:
       next_info = jax.tree.map(where_done, reset_state.info, state.info)

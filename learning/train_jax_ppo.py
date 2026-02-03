@@ -287,6 +287,17 @@ def main(argv):
     print(f"Environment Config Overrides:\n{env_cfg_overrides}\n")
   print(f"PPO Training Parameters:\n{ppo_params}")
 
+  # Log observation and action space dimensions
+  print(f"\nEnvironment Spaces:")
+  print(f"  Observation dim: {env.observation_size}")
+  print(f"  Action dim: {env.action_size}")
+
+  # Log JAX device info
+  devices = jax.devices()
+  print(f"\nJAX Devices:")
+  for d in devices:
+    print(f"  {d.device_kind}: {d}")
+
   # Generate unique experiment name
   now = datetime.datetime.now()
   timestamp = now.strftime("%Y%m%d-%H%M%S")

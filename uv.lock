@@ -3833,7 +3833,7 @@ requires-dist = [
     { name = "matplotlib", marker = "extra == 'notebooks'" },
     { name = "mediapy" },
     { name = "ml-collections" },
-    { name = "mujoco", specifier = ">=3.4", index = "https://py.mujoco.org/" },
+    { name = "mujoco", specifier = ">=3.4.dev0", index = "https://py.mujoco.org/" },
     { name = "mujoco-mjx", git = "https://github.com/google-deepmind/mujoco?subdirectory=mjx&rev=main" },
     { name = "mypy", marker = "extra == 'dev'" },
     { name = "orbax-checkpoint", specifier = ">=0.11.22" },
